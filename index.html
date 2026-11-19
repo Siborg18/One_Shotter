@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>One Shotter</title>
+  <meta name="description" content="Forge a ready-to-use LLM prompt for a tabletop one-shot adventure.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,3 58,18 58,46 32,61 6,46 6,18' fill='%23070a16' stroke='%236ff6f0' stroke-width='3'/%3E%3Cpolygon points='32,14 47,40 17,40' fill='none' stroke='%236ff6f0' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Grenze+Gotisch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Oswald:wght@400;500&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ===== Background: cavern, crystals, mist, motes ===== -->
+  <div class="bg" aria-hidden="true">
+    <svg class="cave" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="g-open" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#d9efff" stop-opacity="0.95"/>
+          <stop offset="0.25" stop-color="#7fa6e8" stop-opacity="0.6"/>
+          <stop offset="0.6" stop-color="#2c3d7a" stop-opacity="0.35"/>
+          <stop offset="1" stop-color="#0a0f22" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="g-crystal" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="#2b4f9a" stop-opacity="0.2"/>
+          <stop offset="0.55" stop-color="#9fe9ff" stop-opacity="0.85"/>
+          <stop offset="1" stop-color="#ffffff"/>
+        </linearGradient>
+        <linearGradient id="g-rock" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#18213f"/>
+          <stop offset="0.6" stop-color="#0d1328"/>
+          <stop offset="1" stop-color="#070a16"/>
+        </linearGradient>
+        <linearGradient id="g-shaft" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#b9dcff" stop-opacity="0.35"/>
+          <stop offset="1" stop-color="#b9dcff" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="g-water" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0b1330" stop-opacity="0"/>
+          <stop offset="0.4" stop-color="#0a1129" stop-opacity="0.8"/>
+          <stop offset="1" stop-color="#03050b"/>
+        </linearGradient>
+        <filter id="f-blur-lg"><feGaussianBlur stdDeviation="28"/></filter>
+        <filter id="f-blur-sm"><feGaussianBlur stdDeviation="6"/></filter>
+      </defs>
+
+      <rect width="1600" height="900" fill="#060812"/>
+      <ellipse cx="520" cy="190" rx="560" ry="380" fill="url(#g-open)"/>
+
+      <!-- light shaft -->
+      <polygon points="420,180 640,170 980,900 260,900" fill="url(#g-shaft)" filter="url(#f-blur-lg)" opacity="0.55"/>
+
+      <!-- crystal cluster (glow copy + sharp copy) -->
+      <g class="crystals">
+        <g filter="url(#f-blur-sm)" opacity="0.8">
+          <polygon points="520,252 506,70 522,34 538,66 546,246"/>
+          <polygon points="534,254 596,96 622,82 626,112 556,262"/>
+          <polygon points="506,254 432,110 434,80 458,92 528,244"/>
+          <polygon points="548,264 668,170 696,162 686,188 562,274"/>
+          <polygon points="500,262 392,206 378,184 404,182 512,250"/>
+          <polygon points="562,262 632,140 644,134 646,150 574,268"/>
+          <polygon points="488,256 458,150 464,132 474,146 500,248"/>
+        </g>
+        <polygon points="520,252 506,70 522,34 538,66 546,246"/>
+        <polygon points="534,254 596,96 622,82 626,112 556,262"/>
+        <polygon points="506,254 432,110 434,80 458,92 528,244"/>
+        <polygon points="548,264 668,170 696,162 686,188 562,274"/>
+        <polygon points="500,262 392,206 378,184 404,182 512,250"/>
+        <polygon points="562,262 632,140 644,134 646,150 574,268"/>
+        <polygon points="488,256 458,150 464,132 474,146 500,248"/>
+      </g>
+
+      <!-- cavern rock with an opening -->
+      <path fill="url(#g-rock)" fill-rule="evenodd" opacity="0.88" filter="url(#f-blur-sm)"
+        d="M0,0 H1600 V900 H0 Z
+           M300,330 L262,250 L300,170 L355,96 L420,58 L470,18 L540,8 L602,40 L662,28 L722,92 L768,152 L742,232 L790,300 L726,362 L640,398 L560,380 L480,420 L400,392 L338,380 Z"/>
+
+      <!-- pillars and cliff silhouettes -->
+      <path fill="#070a17" opacity="0.92" d="M1340,0 C1372,200 1300,380 1362,560 C1396,700 1340,820 1362,900 H1600 V0 Z"/>
+      <path fill="#0a0e1f" opacity="0.8" d="M1180,0 C1200,120 1150,240 1190,330 C1210,380 1180,420 1200,470 L1240,470 C1230,380 1270,260 1240,150 C1230,90 1250,40 1240,0 Z"/>
+      <path fill="#05070f" d="M0,520 C120,480 220,560 360,600 C480,640 560,700 640,760 L700,900 H0 Z"/>
+      <path fill="#04060d" opacity="0.9" d="M0,180 C60,240 40,330 90,420 C120,470 80,500 0,510 Z"/>
+
+      <!-- water -->
+      <rect x="0" y="640" width="1600" height="260" fill="url(#g-water)"/>
+      <ellipse cx="760" cy="760" rx="420" ry="6" fill="#9fe9ff" opacity="0.08"/>
+    </svg>
+    <div class="mist mist-a"></div>
+    <div class="mist mist-b"></div>
+    <canvas id="motes"></canvas>
+    <div class="vignette"></div>
+  </div>
+
+  <!-- ===== Arcane linework ===== -->
+  <svg class="rings" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <line x1="800" y1="0" x2="800" y2="128" />
+    <circle cx="800" cy="108" r="13" />
+    <circle class="ring-a" cx="800" cy="590" r="440" />
+    <circle class="ring-b" cx="860" cy="560" r="420" />
+    <circle class="ring-c" cx="800" cy="590" r="452" />
+  </svg>
+
+  <!-- ===== Header ===== -->
+  <header class="topbar">
+    <a class="wordmark" href="#tale" aria-label="One Shotter, back to top">
+      <span>ONE</span>
+      <svg class="d20" viewBox="0 0 64 64" aria-hidden="true">
+        <polygon points="32,3 58,18 58,46 32,61 6,46 6,18"/>
+        <polygon points="32,15 48,42 16,42"/>
+        <line x1="32" y1="3" x2="32" y2="15"/><line x1="6" y1="18" x2="16" y2="42"/><line x1="58" y1="18" x2="48" y2="42"/>
+        <line x1="6" y1="46" x2="16" y2="42"/><line x1="58" y1="46" x2="48" y2="42"/><line x1="32" y1="61" x2="16" y2="42"/><line x1="32" y1="61" x2="48" y2="42"/>
+        <line x1="6" y1="18" x2="32" y2="15"/><line x1="58" y1="18" x2="32" y2="15"/>
+      </svg>
+      <span>SHOTTER</span>
+    </a>
+
+    <nav class="badges" aria-label="Chapters">
+      <a class="badge" href="#tale" data-target="tale"><span>The<br>Tale</span></a>
+      <a class="badge" href="#party" data-target="party"><span>Your<br>Party</span></a>
+      <a class="badge" href="#prompt" data-target="prompt"><span>The<br>Prompt</span></a>
+    </nav>
+
+    <button class="close" id="reset" type="button" title="Reset all choices">
+      <span class="close-label">Reset</span>
+      <span class="close-circle" aria-hidden="true">&times;</span>
+    </button>
+  </header>
+
+  <nav class="rail" aria-hidden="true">
+    <span class="rail-dot" data-target="tale"></span>
+    <span class="rail-dot" data-target="party"></span>
+    <span class="rail-dot" data-target="prompt"></span>
+  </nav>
+
+  <main>
+    <!-- ===== Chapter I: The Tale ===== -->
+    <section class="chapter" id="tale" aria-labelledby="h-tale">
+      <div class="chapter-head">
+        <h1 class="incant" id="h-tale">
+          <span class="i1"><small>A</small>Legend</span>
+          <span class="i2">forged for</span>
+          <span class="i3">a single</span>
+          <span class="i4">night.</span>
+        </h1>
+        <p class="lede">Choose the shape of the adventure. One Shotter turns your choices into a carefully designed prompt that any capable AI can turn into a complete, table-ready one-shot.</p>
+        <button class="btn btn-red" id="roll-all" type="button">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><polygon points="32,3 58,18 58,46 32,61 6,46 6,18"/><polygon points="32,15 48,42 16,42"/></svg>
+          Roll the bones
+        </button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span>I</span>The Shape of the Tale</div>
+        <div class="fields" id="fields"></div>
+        <div class="fields fields-wide">
+          <div class="field">
+            <label for="notes">Your own ideas <em>optional</em></label>
+            <p class="hint">A villain's name, a set-piece, a magic item, an in-joke. These get woven in.</p>
+            <textarea id="notes" rows="3" placeholder="e.g. The climax happens on a collapsing bridge over a chasm of glowing crystals."></textarea>
+          </div>
+          <div class="field">
+            <label for="avoid">Lines &amp; veils <em>optional</em></label>
+            <p class="hint">Anything the story must never include.</p>
+            <textarea id="avoid" rows="3" placeholder="e.g. spiders, harm to children, drowning"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Chapter II: The Party ===== -->
+    <section class="chapter" id="party" aria-labelledby="h-party">
+      <div class="chapter-head">
+        <h2 class="incant" id="h-party">
+          <span class="i1"><small>Who</small>Dares</span>
+          <span class="i2">to enter</span>
+          <span class="i4">the dark?</span>
+        </h2>
+        <p class="lede">There's a seat here for every player in your party size. Leave a seat on Random and the AI creates that hero, or switch it to Existing hero and bring your own. They'll be written into the story with a personal hook and a moment in the spotlight.</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title"><span>II</span>The Company <b id="party-count"></b></div>
+        <div class="party" id="party-list"></div>
+      </div>
+
+      <datalist id="dl-ancestry"></datalist>
+      <datalist id="dl-class"></datalist>
+    </section>
+
+    <!-- ===== Chapter III: The Prompt ===== -->
+    <section class="chapter chapter-full" id="prompt" aria-labelledby="h-prompt">
+      <div class="chapter-head">
+        <h2 class="incant" id="h-prompt">
+          <span class="i1"><small>Speak</small>the</span>
+          <span class="i2">Incantation.</span>
+        </h2>
+        <p class="lede">Copy the prompt and paste it into the AI of your choice. It updates live as you change anything above.</p>
+      </div>
+
+      <div class="panel panel-prompt">
+        <div class="prompt-bar">
+          <div class="panel-title"><span>III</span>Your Prompt <b id="prompt-stats"></b></div>
+          <div class="prompt-actions">
+            <button class="btn btn-glow" id="copy" type="button">Copy prompt</button>
+            <button class="btn btn-ghost" id="download" type="button">Download .txt</button>
+            <a class="btn btn-ghost" id="open-claude" target="_blank" rel="noopener">Open in Claude</a>
+            <a class="btn btn-ghost" id="open-chatgpt" target="_blank" rel="noopener">Open in ChatGPT</a>
+          </div>
+        </div>
+        <pre class="prompt-text" id="prompt-text" tabindex="0" aria-label="Generated prompt"></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="support" id="support" hidden>
+      <p>One Shotter is free. If it saved your session, you can leave a tip for the next round.</p>
+      <a class="btn btn-ghost" id="support-link" target="_blank" rel="noopener">Tip with PayPal</a>
+    </div>
+    <p>One Shotter is an unofficial fan tool and is not affiliated with Wizards of the Coast. Your choices are stored only in this browser.</p>
+  </footer>
+
+  <button class="float-copy" id="float-copy" type="button">Copy prompt</button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/prompt.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
