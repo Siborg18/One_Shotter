@@ -1,7 +1,8 @@
 # One Shotter - tiny local web server (no installs needed, uses built-in Windows PowerShell)
 # Serves this folder at http://localhost:8080 and opens your browser. Close the window to stop.
 $ErrorActionPreference = 'Stop'
-$root = $PSScriptRoot
+$root = [IO.Path]::GetFullPath($PSScriptRoot).TrimEnd('\', '/')
+$rootPrefix = $root + [IO.Path]::DirectorySeparatorChar   # files must be inside this folder, not a sibling starting with the same name
 $port = 8080
 $mime = @{
   '.html'='text/html; charset=utf-8'; '.css'='text/css; charset=utf-8'; '.js'='text/javascript; charset=utf-8';
@@ -36,8 +37,8 @@ try {
       $rel = [Uri]::UnescapeDataString($ctx.Request.Url.AbsolutePath).TrimStart('/')
       if ([string]::IsNullOrEmpty($rel)) { $rel = 'index.html' }
       $full = [IO.Path]::GetFullPath([IO.Path]::Combine($root, $rel))
-      if ((Test-Path $full -PathType Container)) { $full = Join-Path $full 'index.html' }
-      if (-not $full.StartsWith($root, [StringComparison]::OrdinalIgnoreCase) -or -not (Test-Path $full -PathType Leaf)) {
+      if ((Test-Path -LiteralPath $full -PathType Container)) { $full = Join-Path $full 'index.html' }
+      if (-not $full.StartsWith($rootPrefix, [StringComparison]::OrdinalIgnoreCase) -or -not (Test-Path -LiteralPath $full -PathType Leaf)) {
         $res.StatusCode = 404
         $bytes = [Text.Encoding]::UTF8.GetBytes('Not found')
       } else {
